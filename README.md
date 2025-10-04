@@ -43,14 +43,14 @@ python task_cli.py update 1 "Buy groceries and cook dinner"
 ```
 python task_cli.py delete 1
 ```
+### Set task status (in-progress, done)
+```
+python task_cli.py done 2
 
+python task_cli.py mark-in-progress 2
 
-### Next steps
-Add task storage using a tasks.json file.
-
-Functionality for updating task status (todo, in-progress, done).
-
-Add timestamps for when tasks are created and updated.
+python task_cli.py list
+```
 
 
 ### Technologies used
