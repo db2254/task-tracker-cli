@@ -6,6 +6,7 @@ from datetime import datetime
 # Path to store the tasks
 TASKS_FILE = Path("tasks.json")
 
+
 def load_tasks():
     """Load tasks from the JSON file, or return empty list if not exist"""
     if not TASKS_FILE.exists():
@@ -13,12 +14,14 @@ def load_tasks():
     with open(TASKS_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
 
+
 def save_tasks(tasks):
     """Save tasks list to JSON file"""
     with open(TASKS_FILE, "w", encoding="utf-8") as f:
         json.dump(tasks, f, indent=4)
 
 # Main Functions
+
 
 def add_task(args):
     tasks = load_tasks()
@@ -58,7 +61,6 @@ def list_tasks(args):
         print(f"    Updated: {task['updatedAt']}\n")
 
 
-
 def update_task(args):
     tasks = load_tasks()
     task = next((t for t in tasks if t["id"] == args.id), None)
@@ -83,6 +85,7 @@ def delete_task(args):
     save_tasks(tasks)
     print(f"Task {args.id} deleted successfully")
 
+
 def mark_in_progress_task(args):
     tasks = load_tasks()
     task = next((t for t in tasks if t["id"] == args.id), None)
@@ -94,7 +97,8 @@ def mark_in_progress_task(args):
     task["updatedAt"] = datetime.now().isoformat()
     save_tasks(tasks)
     print(f"Task {args.id} marked as in progress.")
-    
+
+
 def mark_done_task(args):
     tasks = load_tasks()
     task = next((t for t in tasks if t["id"] == args.id), None)
@@ -106,10 +110,6 @@ def mark_done_task(args):
     task["updatedAt"] = datetime.now().isoformat()
     save_tasks(tasks)
     print(f"Task {args.id} marked as done.")
-
-    
-    
-
 
 
 def main():
@@ -123,7 +123,6 @@ def main():
         required=True,
         help="Available commands"
     )
-
 
     # Add command
     parser_add = subparsers.add_parser("add", help="Add a new task")
@@ -168,6 +167,7 @@ def main():
     # Parse arguments and call the correct function
     args = parser.parse_args()
     args.func(args)
+
 
 if __name__ == "__main__":
     main()
