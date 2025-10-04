@@ -18,7 +18,7 @@ def save_tasks(tasks):
     with open(TASKS_FILE, "w", encoding="utf-8") as f:
         json.dump(tasks, f, indent=4)
 
-# Functions
+# Main Functions
 
 def add_task(args):
     tasks = load_tasks()
@@ -39,8 +39,25 @@ def add_task(args):
 
 
 def list_tasks(args):
-    filter_status = args.status if args.status else "None"
-    print(f"Running list with filter: {filter_status}")
+    tasks = load_tasks()
+    if not tasks:
+        print("No tasks found")
+        return
+    
+    if args.status:
+        tasks = [t for t in tasks if t["status"] == args.status]
+    
+    if not tasks:
+        print(f"No tasks found with status: {args.status}")
+        return
+    
+    print(f"\n Listing {len(tasks)} task(s):\n")
+    for task in tasks:
+        print(f"[{task['id']}] {task['description']} ({task['status']})")
+        print(f"    Created: {task['createdAt']}")
+        print(f"    Updated: {task['updatedAt']}\n")
+
+
 
 def update_task(args):
     print(f"Running update on task {args.id} with new description: {args.new_description}")
