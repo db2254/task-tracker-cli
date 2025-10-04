@@ -60,7 +60,17 @@ def list_tasks(args):
 
 
 def update_task(args):
-    print(f"Running update on task {args.id} with new description: {args.new_description}")
+    tasks = load_tasks()
+    task = next((t for t in tasks if t["id"] == args.id), None)
+    if not task:
+        print(f"Task with ID {args.id} not found.")
+        return
+    
+    task["description"] = args.new_description
+    task["updatedAt"] = datetime.now().isoformat()
+    save_tasks(tasks)
+    print(f"Task {args.id} updated successfully")
+   
 
 def delete_task(args):
     print(f"Running delete on task {args.id}")
