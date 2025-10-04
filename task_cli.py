@@ -94,6 +94,21 @@ def mark_in_progress_task(args):
     task["updatedAt"] = datetime.now().isoformat()
     save_tasks(tasks)
     print(f"Task {args.id} marked as in progress.")
+    
+def mark_done_task(args):
+    tasks = load_tasks()
+    task = next((t for t in tasks if t["id"] == args.id), None)
+    if not task:
+        print(f"Task with {args.id} not found.")
+        return
+    
+    task["status"] = "done"
+    task["updatedAt"] = datetime.now().isoformat()
+    save_tasks(tasks)
+    print(f"Task {args.id} marked as done.")
+
+    
+    
 
 
 
@@ -141,6 +156,14 @@ def main():
     )
     parser_mark_in_progress.add_argument("id", type=int, help="Task ID")
     parser_mark_in_progress.set_defaults(func=mark_in_progress_task)
+
+    # Done command
+    parser_done = subparsers.add_parser(
+        "done",
+        help="Mark a task as done"
+    )
+    parser_done.add_argument("id", type=int, help="Task ID")
+    parser_done.set_defaults(func=mark_done_task)
 
     # Parse arguments and call the correct function
     args = parser.parse_args()
