@@ -83,6 +83,18 @@ def delete_task(args):
     save_tasks(tasks)
     print(f"Task {args.id} deleted successfully")
 
+def mark_in_progress_task(args):
+    tasks = load_tasks()
+    task = next((t for t in tasks if t["id"] == args.id), None)
+    if not task:
+        print(f"Task with {args.id} not found.")
+        return
+    
+    task["status"] = "in-progress"
+    task["updatedAt"] = datetime.now().isoformat()
+    save_tasks(tasks)
+    print(f"Task {args.id} marked as in progress.")
+
 
 
 def main():
@@ -121,6 +133,14 @@ def main():
     parser_delete = subparsers.add_parser("delete", help="Delete a task")
     parser_delete.add_argument("id", type=int, help="Task ID")
     parser_delete.set_defaults(func=delete_task)
+
+    # mark in progress command
+    parser_mark_in_progress = subparsers.add_parser(
+        "mark-in-progress",
+        help="Mark a task as in-progress"
+    )
+    parser_mark_in_progress.add_argument("id", type=int, help="Task ID")
+    parser_mark_in_progress.set_defaults(func=mark_in_progress_task)
 
     # Parse arguments and call the correct function
     args = parser.parse_args()
