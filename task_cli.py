@@ -1,9 +1,41 @@
 import argparse
+import json
+from pathlib import Path
+from datetime import datetime
+
+# Path to store the tasks
+TASKS_FILE = Path("tasks.json")
+
+def load_tasks():
+    """Load tasks from the JSON file, or return empty list if not exist"""
+    if not TASKS_FILE.exists():
+        return[]
+    with open(TASKS_FILE, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+def save_tasks(tasks):
+    """Save tasks list to JSON file"""
+    with open(TASKS_FILE, "w", encoding="utf-8") as f:
+        json.dump(tasks, f, indent=4)
 
 # Functions
 
 def add_task(args):
-    print(f"Running add with description: {args.description}")
+    tasks = load_tasks()
+    new_id = max([t["id"] for t in tasks], default=0) + 1
+
+    now = datetime.now().isoformat()
+    new_task = {
+        "id": new_id,
+        "description": args.description,
+        "status": "todo",
+        "createdAt": now,
+        "updatedAt": now
+    }
+
+    tasks.append(new_task)
+    save_tasks(tasks)
+    print(f"Task added successfully (ID: {new_id})")
 
 
 def list_tasks(args):
