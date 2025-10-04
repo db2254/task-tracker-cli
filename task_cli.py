@@ -73,7 +73,16 @@ def update_task(args):
    
 
 def delete_task(args):
-    print(f"Running delete on task {args.id}")
+    tasks = load_tasks()
+    task = next((t for t in tasks if t["id"] == args.id), None)
+    if not task:
+        print(f"Task with ID {args.id} not found.")
+        return
+    
+    tasks = [t for t in tasks if t["id"] != args.id]
+    save_tasks(tasks)
+    print(f"Task {args.id} deleted successfully")
+
 
 
 def main():
